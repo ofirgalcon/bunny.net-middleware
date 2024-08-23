@@ -29,7 +29,7 @@ Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Secu
 
 ## Packaging Bunny.net Middleware
 
-The included [luggage][7] makefile can be used to create an installer package for Bunny.net Middleware.
+The included luggage makefile can be used to create an installer package for Bunny.net Middleware.
 
 1. ```make pkg``` and install.
 2. Set your ```SoftwareRepoURL``` to your Bunny.net Distribution address and run munki.
