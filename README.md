@@ -8,7 +8,8 @@ Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Secu
 
 ## Requirements
 
-* Bunny.net pull zone with your munki repo inside.
+* munki https://github.com/munki/munki
+* Bunny.net pull zone with your munki repo inside. https://bunny.net?ref=mlmxq8squb
 * Bunny.net Url Token Authentication Key for that pull zone
 
 ### Configure a managed client to access the Bunny.net munki repo
@@ -34,4 +35,4 @@ The included luggage makefile can be used to create an installer package for Bun
 1. ```make pkg``` and install.
 2. Set your ```SoftwareRepoURL``` to your Bunny.net Distribution address and run munki.
 
-https://bunny.net?ref=mlmxq8squb
+
