@@ -8,7 +8,7 @@
 
 import hashlib
 from base64 import b64encode
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode, urlparse, quote
 import time
 import subprocess
 
@@ -59,8 +59,6 @@ def process_request_options(options):
     """Process request options to include token and expiration if the URL contains 'cdn.net'."""
     url = options.get("url")
     if "cdn.net" in url:
-        # print("URL Before: %s" % options.get("url"))
-
         # Get the token security key
         TOKEN_SECURITY_KEY = get_token_security_key()
         if not TOKEN_SECURITY_KEY:
@@ -70,6 +68,10 @@ def process_request_options(options):
         # Parse the URL to extract the path
         parsed_url = urlparse(url)
         url_path = parsed_url.path
+
+        # Check if the path is already encoded
+        if '%' not in url_path:
+            url_path = quote(url_path)  # Ensure the path is properly encoded only if not already encoded
         
         # Calculate the expiration timestamp (e.g., 1 hour from now)
         expires = int(time.time()) + 3600
@@ -84,19 +86,15 @@ def process_request_options(options):
         }
 
         # Concat the URL and query string
-        options["url"] = f'{options["url"]}?{encode_params(query_params)}'
-        # print("URL After: %s" % options.get("url"))
-    # else:
-        # print("URL contains no 'cdn.net', leaving it unmodified.")
+        options["url"] = f'{parsed_url.scheme}://{parsed_url.netloc}{url_path}?{encode_params(query_params)}'
     
     return options
 
 # # Example usage
-# options_1 = {"url": "https://test.b-cdn.net/assets/kahd.ico"}
+# options_1 = {"url": "https://test.b-cdn.net/Pt Alert-2.0.2.0.1.dmg"}
 # processed_options_1 = process_request_options(options_1)
 # print(f"Processed URL 1: {processed_options_1['url']}")
 
-# options_2 = {"url": "https://example.com/assets/asasas.ico"}
+# options_2 = {"url": "https://example.com/assets/example_file.dmg"}
 # processed_options_2 = process_request_options(options_2)
 # print(f"Processed URL 2: {processed_options_2['url']}")
-
