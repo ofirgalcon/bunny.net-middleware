@@ -14,7 +14,7 @@ Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Secu
 ### Configure a managed client to access the Bunny.net munki repo
 
 1. Install ```middleware_bunny.py``` to ```/usr/local/munki/```.
-2. Set the munki preference ```SoftwareRepoURL``` (or ```PackageURL``` if you only serve the pkgs directory on bunney) to your Bunny.net Distribution URL.
+2. Set the munki preference ```SoftwareRepoURL``` (or ```PackageURL``` if you only serve the pkgs directory on bunny) to your Bunny.net Distribution URL.
 3. Set Bunny.net Middleware preferences for your Access Key ID and the resource expiration timeout in minutes. If unset expiration will default to 60 minutes.
 
     ```shell
