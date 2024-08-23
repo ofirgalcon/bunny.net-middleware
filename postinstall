@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Bunny.net Access Key ID
+defaults write /private/var/root/Library/Preferences/ManagedInstallsProc bunny_key "YOUR_BUNNY_KEY"
+
