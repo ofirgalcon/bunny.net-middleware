@@ -1,6 +1,6 @@
 # What is Bunny.net Middleware
 
-Bunny.net Middleware enables managed clients to securely access a [munki][0] repo from Bunny's [Bunny.net][1] Global Content Delivery Network. 
+Bunny.net Middleware enables munki managed clients to securely access a munki repo from Bunny's Global Content Delivery Network. 
 
 Bunny.net Middleware uses a Bunny.net private key to create and sign requests for private Bunny.net resources. Each signed request includes an expiration date after which the request is no longer valid.
 
