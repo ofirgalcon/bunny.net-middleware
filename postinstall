@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# Bunny.net Access Key ID
+# Bunny.net pull zone Url Token Authentication Key
 defaults write /private/var/root/Library/Preferences/ManagedInstallsProc bunny_key "YOUR_BUNNY_KEY"
 

@@ -4,7 +4,7 @@ Bunny.net Middleware enables munki managed clients to securely access a munki re
 
 Bunny.net Middleware uses a Bunny.net private key to create and sign requests for private Bunny.net resources. Each signed request includes an expiration date after which the request is no longer valid.
 
-Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Security > Token Authentication
+Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Security > Token Authentication > Url Token Authentication Key
 
 ## Requirements
 
@@ -16,7 +16,7 @@ Bunny.net private keys are available from dash.bunny.ney > Delivery > CDN > Secu
 
 1. Install ```middleware_bunny.py``` to ```/usr/local/munki/```.
 2. Set the munki preference ```SoftwareRepoURL``` (or ```PackageURL``` if you only serve the pkgs directory on bunny) to your Bunny.net Distribution URL.
-3. Set Bunny.net Middleware preferences for your Access Key
+3. Set Bunny.net Middleware preferences for your Url Token Authentication Key
 
     ```shell
     sudo defaults write /private/var/root/Library/Preferences/ManagedInstallsProc bunny_key "YOUR_BUNNY_KEY"
