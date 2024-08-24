@@ -6,9 +6,9 @@
 # requires bunny.net CDN pull zone key 
 # defaults write /private/var/root/Library/Preferences/ManagedInstallsProc bunny_key "YOUR_BUNNY_KEY"
 
+from urllib.parse import quote, urlparse, urlencode, unquote
 import hashlib
 from base64 import b64encode
-from urllib.parse import urlencode, urlparse, quote
 import time
 import subprocess
 
@@ -26,9 +26,9 @@ def get_token_security_key():
         print(f"Error reading TOKEN_SECURITY_KEY: {e}")
         return None
 
-def generate_token(security_key, url_path, expires, filtered_ip=""):
-    """Generate BunnyCDN URL authentication token based on the security key, URL path, and expiration time."""
-    token_content = f'{security_key}{url_path}{expires}{filtered_ip}'
+def generate_token(security_key, original_path, expires, filtered_ip=""):
+    """Generate BunnyCDN URL authentication token based on the security key, original URL path, and expiration time."""
+    token_content = f'{security_key}{original_path}{expires}{filtered_ip}'
     md5sum = hashlib.md5()
     md5sum.update(token_content.encode('ascii'))
     token_digest = md5sum.digest()
@@ -41,19 +41,7 @@ def generate_token(security_key, url_path, expires, filtered_ip=""):
 
 def encode_params(data):
     """Encode parameters for the URL."""
-    result = []
-    for k, vs in data.items():
-        if isinstance(vs, str) or not hasattr(vs, "__iter__"):
-            vs = [vs]
-        for v in vs:
-            if v is not None:
-                result.append(
-                    (
-                        k.encode("utf-8") if isinstance(k, str) else k,
-                        v.encode("utf-8") if isinstance(v, str) else v,
-                    )
-                )
-    return urlencode(result, doseq=True)
+    return urlencode(data, doseq=True)
 
 def process_request_options(options):
     """Process request options to include token and expiration if the URL contains 'cdn.net'."""
@@ -69,15 +57,14 @@ def process_request_options(options):
         parsed_url = urlparse(url)
         url_path = parsed_url.path
 
-        # Check if the path is already encoded
-        if '%' not in url_path:
-            url_path = quote(url_path)  # Ensure the path is properly encoded only if not already encoded
-        
+        # Unquote the path to ensure it hasn't been double encoded
+        original_path = unquote(url_path)
+
         # Calculate the expiration timestamp (e.g., 1 hour from now)
         expires = int(time.time()) + 3600
         
-        # Generate the token using the security key, the extracted URL path, and expiration time
-        token = generate_token(TOKEN_SECURITY_KEY, url_path, expires)
+        # Generate the token using the security key, the unencoded URL path, and expiration time
+        token = generate_token(TOKEN_SECURITY_KEY, original_path, expires)
         
         # Add token and expiration to query parameters
         query_params = {
@@ -85,16 +72,17 @@ def process_request_options(options):
             "expires": expires
         }
 
-        # Concat the URL and query string
-        options["url"] = f'{parsed_url.scheme}://{parsed_url.netloc}{url_path}?{encode_params(query_params)}'
+        # Concat the URL and query string using the encoded path
+        encoded_url_path = quote(original_path)
+        options["url"] = f'{parsed_url.scheme}://{parsed_url.netloc}{encoded_url_path}?{encode_params(query_params)}'
     
     return options
 
 # # Example usage
-# options_1 = {"url": "https://test.b-cdn.net/Pt Alert-2.0.2.0.1.dmg"}
+# options_1 = {"url": "https://test.b-cdn.net/someinstaller.dmg"}
 # processed_options_1 = process_request_options(options_1)
 # print(f"Processed URL 1: {processed_options_1['url']}")
 
-# options_2 = {"url": "https://example.com/assets/example_file.dmg"}
+# options_2 = {"url": "https://example.com/assets/asasas.ico"}
 # processed_options_2 = process_request_options(options_2)
 # print(f"Processed URL 2: {processed_options_2['url']}")
