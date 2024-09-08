@@ -12,6 +12,8 @@ from base64 import b64encode
 import time
 import subprocess
 
+__version__ = '1.0.5'
+
 def get_token_security_key():
     """Retrieve the TOKEN_SECURITY_KEY using the defaults read command."""
     try:
